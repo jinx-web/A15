@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A15 Timetable</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #f8f9fa, #e9ecef);
+        }
+        .day-buttons {
+            margin: 20px 0;
+        }
+        .day-buttons button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            transition: transform 0.2s, background-color 0.3s ease;
+        }
+        .day-buttons button:hover {
+            background-color: #0056b3;
+            transform: scale(1.1);
+        }
+        .day-buttons button.active {
+            background-color: #28a745;
+        }
+        .timetable-container {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            height: 250px;
+        }
+        .timetable {
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0;
+            transform: translateX(100%);
+            transition: transform 0.5s ease-in-out;
+            opacity: 0;
+        }
+        .timetable.active {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        .timetable.hidden {
+            display: none;
+        }
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            width: 80%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        .live-clock {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
+        }
+        .creator {
+            margin-top: 5px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>A15 Timetable</h1>
+    <div class="day-buttons">
+        <button onclick="showTimetable('monday')" id="btn-monday">Monday</button>
+        <button onclick="showTimetable('tuesday')" id="btn-tuesday">Tuesday</button>
+        <button onclick="showTimetable('wednesday')" id="btn-wednesday">Wednesday</button>
+        <button onclick="showTimetable('thursday')" id="btn-thursday">Thursday</button>
+        <button onclick="showTimetable('friday')" id="btn-friday">Friday</button>
+    </div>
+
+    <div class="timetable-container">
+        <div id="monday" class="timetable hidden">
+            <h2>Monday</h2>
+            <table>
+                <tr>
+                    <th>Time</th>
+                    <th>Class</th>
+                    <th>Type</th>
+                    <th>Teacher</th>
+                    <th>Room</th>
+                </tr>
+                <tr>
+                    <td>9:00 - 10:00</td>
+                    <td>Math</td>
+                    <td>Lecture</td>
+                    <td>Mr. Smith</td>
+                    <td>101</td>
+                </tr>
+                <!-- Add more rows as needed -->
+            </table>
+        </div>
+
+        <div id="tuesday" class="timetable hidden">
+            <h2>Tuesday</h2>
+            <table>
+                <tr>
+                    <th>Time</th>
+                    <th>Class</th>
+                    <th>Type</th>
+                    <th>Teacher</th>
+                    <th>Room</th>
+                </tr>
+                <tr>
+                    <td>10:00 - 11:00</td>
+                    <td>Science</td>
+                    <td>Tutorial</td>
+                    <td>Ms. Johnson</td>
+                    <td>102</td>
+                </tr>
+                <!-- Add more rows as needed -->
+            </table>
+        </div>
+
+        <div id="wednesday" class="timetable hidden">
+            <h2>Wednesday</h2>
+            <table>
+                <tr>
+                    <th>Time</th>
+                    <th>Class</th>
+                    <th>Type</th>
+                    <th>Teacher</th>
+                    <th>Room</th>
+                </tr>
+                <tr>
+                    <td>11:00 - 12:00</td>
+                    <td>English</td>
+                    <td>Lecture</td>
+                    <td>Mr. Brown</td>
+                    <td>103</td>
+                </tr>
+                <!-- Add more rows as needed -->
+            </table>
+        </div>
+
+        <div id="thursday" class="timetable hidden">
+            <h2>Thursday</h2>
+            <table>
+                <tr>
+                    <th>Time</th>
+                    <th>Class</th>
+                    <th>Type</th>
+                    <th>Teacher</th>
+                    <th>Room</th>
+                </tr>
+                <tr>
+                    <td>12:00 - 1:00</td>
+                    <td>History</td>
+                    <td>Practical</td>
+                    <td>Ms. Davis</td>
+                    <td>104</td>
+                </tr>
+                <!-- Add more rows as needed -->
+            </table>
+        </div>
+
+        <div id="friday" class="timetable hidden">
+            <h2>Friday</h2>
+            <table>
+                <tr>
+                    <th>Time</th>
+                    <th>Class</th>
+                    <th>Type</th>
+                    <th>Teacher</th>
+                    <th>Room</th>
+                </tr>
+                <tr>
+                    <td>1:00 - 2:00</td>
+                    <td>Art</td>
+                    <td>Lecture</td>
+                    <td>Mr. White</td>
+                    <td>105</td>
+                </tr>
+                <!-- Add more rows as needed -->
+            </table>
+        </div>
+    </div>
+
+    <div class="live-clock" id="live-clock"></div>
+    <div class="creator">Made by Jinx</div>
+
+    <script>
+        let currentDay = "monday";
+
+        function showTimetable(day) {
+            if (day === currentDay) return; // Avoid redundant clicks
+
+            const currentTimetable = document.getElementById(currentDay);
+            const nextTimetable = document.getElementById(day);
+
+            const direction = currentDay.localeCompare(day) < 0 ? 1 : -1;
+
+            currentTimetable.style.transform = `translateX(${-100 * direction}%)`;
+            nextTimetable.style.transform = `translateX(${100 * direction}%)`;
+
+            nextTimetable.classList.remove('hidden');
+            setTimeout(() => {
+                nextTimetable.style.transform = 'translateX(0)';
+                nextTimetable.classList.add('active');
+                currentTimetable.classList.remove('active');
+                currentTimetable.classList.add('hidden');
+                currentDay = day;
+            }, 500);
+
+            // Update active button state
+            document.querySelectorAll('.day-buttons button').forEach(button => {
+                button.classList.remove('active');
+            });
+            document.getElementById(`btn-${day}`).classList.add('active');
+        }
+
+        function showTodayTimetable() {
+            const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+            const today = new Date().getDay();
+            const dayName = days[today];
+            if (document.getElementById(dayName)) {
+                showTimetable(dayName);
+            }
+        }
+
+        function updateClock() {
+            const clockElement = document.getElementById('live-clock');
+            const now = new Date();
+            clockElement.textContent = `Today's Date: ${now.toDateString()}, Current Time: ${now.toLocaleTimeString()}`;
+        }
+
+        setInterval(updateClock, 1000);
+
+        window.onload = () => {
+            showTodayTimetable();
+            updateClock();
+        };
+    </script>
+</body>
+</html>
