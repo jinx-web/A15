@@ -1,44 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A15 Timetable</title>
     <style>
+        :root {
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #e9ecef;
+            --text-primary: #333;
+            --text-secondary: #555;
+            --table-bg: white;
+            --table-border: #ccc;
+            --header-bg: #f4f4f4;
+            --button-bg: #007BFF;
+            --button-hover: #0056b3;
+            --active-button: #28a745;
+            --transition-speed: 0.3s;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --table-bg: #2d2d2d;
+            --table-border: #404040;
+            --header-bg: #333333;
+            --button-bg: #0056b3;
+            --button-hover: #007BFF;
+            --active-button: #218838;
+        }
+
+        * {
+            transition: background-color var(--transition-speed) ease,
+                color var(--transition-speed) ease,
+                border-color var(--transition-speed) ease,
+                box-shadow var(--transition-speed) ease;
+        }
+
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 0;
             padding: 0;
-            background: linear-gradient(to right, #f8f9fa, #e9ecef);
+            background: linear-gradient(to right, var(--bg-primary), var(--bg-secondary));
+            color: var(--text-primary);
+            overflow-x: hidden;
         }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--button-bg);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+            background: var(--button-hover);
+        }
+
+        .theme-icon {
+            font-size: 16px;
+        }
+
+        .creator {
+            margin: 10px 0 20px;
+            font-size: clamp(12px, 2.5vw, 14px);
+            color: var(--text-secondary);
+        }
+
+        .heart {
+            color: #ff4d4d;
+            display: inline-block;
+            animation: heartBeat 1.2s infinite;
+        }
+
+        @keyframes heartBeat {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        h1 {
+            padding: 15px;
+            margin: 0;
+            font-size: clamp(24px, 5vw, 32px);
+            color: var(--text-primary);
+        }
+
         .day-buttons {
             margin: 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 10px;
         }
+
         .day-buttons button {
-            margin: 5px;
-            padding: 10px 20px;
-            font-size: 16px;
+            flex: 1;
+            min-width: 80px;
+            max-width: 120px;
+            padding: 12px 8px;
+            font-size: clamp(14px, 3vw, 16px);
             cursor: pointer;
             border: none;
             border-radius: 5px;
-            background-color: #007BFF;
+            background-color: var(--button-bg);
             color: white;
-            transition: transform 0.2s, background-color 0.3s ease;
+            transition: transform 0.2s, background-color var(--transition-speed) ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
         .day-buttons button:hover {
-            background-color: #0056b3;
-            transform: scale(1.1);
+            background-color: var(--button-hover);
+            transform: scale(1.05);
         }
+
         .day-buttons button.active {
-            background-color: #28a745;
+            background-color: var(--active-button);
         }
+
         .timetable-container {
             position: relative;
             overflow: hidden;
             width: 100%;
-            height: 250px;
+            min-height: 400px;
         }
+
         .timetable {
             position: absolute;
             width: 100%;
@@ -47,47 +156,138 @@
             transform: translateX(100%);
             transition: transform 0.5s ease-in-out;
             opacity: 0;
+            padding: 0 10px;
+            box-sizing: border-box;
         }
+
         .timetable.active {
             transform: translateX(0);
             opacity: 1;
+            position: relative;
         }
+
+        .timetable.slide-left {
+            transform: translateX(-100%);
+        }
+
+        .timetable.slide-right {
+            transform: translateX(100%);
+        }
+
         .timetable.hidden {
             display: none;
         }
+
         table {
             margin: 0 auto;
             border-collapse: collapse;
-            width: 80%;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            background-color: white;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: var(--table-bg);
+            border-radius: 8px;
+            overflow: hidden;
         }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 10px;
+
+        th,
+        td {
+            border: 1px solid var(--table-border);
+            padding: 12px 8px;
             text-align: center;
+            font-size: clamp(12px, 2.5vw, 14px);
+            color: var(--text-primary);
         }
+
         th {
-            background-color: #f4f4f4;
+            background-color: var(--header-bg);
+            font-weight: bold;
         }
-        footer {
-            margin-top: 30px;
-            font-size: 14px;
-            color: #6c757d;
-        }
+
         .live-clock {
-            margin-top: 10px;
-            font-size: 16px;
-            color: #333;
+            margin: 20px 0;
+            font-size: clamp(14px, 3vw, 16px);
+            color: var(--text-primary);
+            padding: 10px;
+            background-color: var(--table-bg);
+            border-radius: 20px;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
         .creator {
-            margin-top: 5px;
-            font-size: 14px;
-            color: #555;
+            margin: 10px 0 20px;
+            font-size: clamp(12px, 2.5vw, 14px);
+            color: var(--text-secondary);
+        }
+
+        .timetable-container {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            min-height: 400px;
+        }
+
+        .timetable {
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0;
+            transform: translateX(100%);
+            transition: transform 0.5s ease-in-out;
+            opacity: 0;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+        .timetable.active {
+            transform: translateX(0);
+            opacity: 1;
+            position: relative;
+        }
+
+        .timetable.slide-left {
+            transform: translateX(-100%);
+        }
+
+        .timetable.slide-right {
+            transform: translateX(100%);
+        }
+
+        .timetable.hidden {
+            display: none;
+        }
+
+        @media screen and (max-width: 480px) {
+
+            th,
+            td {
+                padding: 8px 4px;
+            }
+
+            .timetable-container {
+                min-height: 300px;
+            }
+
+            .theme-toggle {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+        }
+
+        @media screen and (max-width: 360px) {
+            .day-buttons button {
+                min-width: 70px;
+                padding: 8px 4px;
+            }
         }
     </style>
 </head>
+
 <body>
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <span class="theme-icon">☀️</span>
+        <span class="theme-text">Toggle Theme</span>
+    </button>
     <h1>A15 Timetable</h1>
     <div class="day-buttons">
         <button onclick="showTimetable('monday')" id="btn-monday">Monday</button>
@@ -95,6 +295,7 @@
         <button onclick="showTimetable('wednesday')" id="btn-wednesday">Wednesday</button>
         <button onclick="showTimetable('thursday')" id="btn-thursday">Thursday</button>
         <button onclick="showTimetable('friday')" id="btn-friday">Friday</button>
+        <button onclick="showTimetable('saturday')" id="btn-saturday">Saturday</button>
     </div>
 
     <div class="timetable-container">
@@ -112,10 +313,16 @@
                     <td>9:00 - 10:00</td>
                     <td>Math</td>
                     <td>Lecture</td>
-                    <td>Mr. Smith</td>
-                    <td>101</td>
+                    <td>Dr. Smith</td>
+                    <td>201</td>
                 </tr>
-                <!-- Add more rows as needed -->
+                <tr>
+                    <td>10:00 - 11:00</td>
+                    <td>Physics</td>
+                    <td>Tutorial</td>
+                    <td>Dr. Johnson</td>
+                    <td>202</td>
+                </tr>
             </table>
         </div>
 
@@ -130,13 +337,19 @@
                     <th>Room</th>
                 </tr>
                 <tr>
-                    <td>10:00 - 11:00</td>
-                    <td>Science</td>
-                    <td>Tutorial</td>
-                    <td>Ms. Johnson</td>
-                    <td>102</td>
+                    <td>11:00 - 12:00</td>
+                    <td>Chemistry</td>
+                    <td>Practical</td>
+                    <td>Dr. Brown</td>
+                    <td>203</td>
                 </tr>
-                <!-- Add more rows as needed -->
+                <tr>
+                    <td>12:00 - 1:00</td>
+                    <td>Biology</td>
+                    <td>Lecture</td>
+                    <td>Dr. White</td>
+                    <td>204</td>
+                </tr>
             </table>
         </div>
 
@@ -151,13 +364,19 @@
                     <th>Room</th>
                 </tr>
                 <tr>
-                    <td>11:00 - 12:00</td>
-                    <td>English</td>
+                    <td>9:00 - 10:00</td>
+                    <td>History</td>
                     <td>Lecture</td>
-                    <td>Mr. Brown</td>
-                    <td>103</td>
+                    <td>Dr. Green</td>
+                    <td>205</td>
                 </tr>
-                <!-- Add more rows as needed -->
+                <tr>
+                    <td>10:00 - 11:00</td>
+                    <td>Geography</td>
+                    <td>Tutorial</td>
+                    <td>Dr. Gray</td>
+                    <td>206</td>
+                </tr>
             </table>
         </div>
 
@@ -172,13 +391,19 @@
                     <th>Room</th>
                 </tr>
                 <tr>
-                    <td>12:00 - 1:00</td>
-                    <td>History</td>
+                    <td>11:00 - 12:00</td>
+                    <td>Computer Science</td>
                     <td>Practical</td>
-                    <td>Ms. Davis</td>
-                    <td>104</td>
+                    <td>Dr. Black</td>
+                    <td>207</td>
                 </tr>
-                <!-- Add more rows as needed -->
+                <tr>
+                    <td>12:00 - 1:00</td>
+                    <td>English</td>
+                    <td>Lecture</td>
+                    <td>Dr. Violet</td>
+                    <td>208</td>
+                </tr>
             </table>
         </div>
 
@@ -193,42 +418,92 @@
                     <th>Room</th>
                 </tr>
                 <tr>
-                    <td>1:00 - 2:00</td>
+                    <td>9:00 - 10:00</td>
                     <td>Art</td>
                     <td>Lecture</td>
-                    <td>Mr. White</td>
-                    <td>105</td>
+                    <td>Dr. Blue</td>
+                    <td>209</td>
                 </tr>
-                <!-- Add more rows as needed -->
+                <tr>
+                    <td>10:00 - 11:00</td>
+                    <td>Economics</td>
+                    <td>Tutorial</td>
+                    <td>Dr. Red</td>
+                    <td>210</td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="saturday" class="timetable hidden">
+            <h2>Saturday</h2>
+            <table>
+                <tr>
+                    <th>Time</th>
+                    <th>Class</th>
+                    <th>Type</th>
+                    <th>Teacher</th>
+                    <th>Room</th>
+                </tr>
+                <tr>
+                    <td>9:00 - 10:00</td>
+                    <td>Music</td>
+                    <td>Practical</td>
+                    <td>Dr. Purple</td>
+                    <td>211</td>
+                </tr>
+                <tr>
+                    <td>10:00 - 11:00</td>
+                    <td>Dance</td>
+                    <td>Practical</td>
+                    <td>Dr. Pink</td>
+                    <td>212</td>
+                </tr>
             </table>
         </div>
     </div>
 
     <div class="live-clock" id="live-clock"></div>
-    <div class="creator">Made by Jinx</div>
+    <div class="creator">Made with <span class="heart">♥</span> by Jinx</div>
 
     <script>
         let currentDay = "monday";
+        const dayOrder = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 
         function showTimetable(day) {
-            if (day === currentDay) return; // Avoid redundant clicks
+            if (day === currentDay) return;
 
             const currentTimetable = document.getElementById(currentDay);
             const nextTimetable = document.getElementById(day);
 
-            const direction = currentDay.localeCompare(day) < 0 ? 1 : -1;
+            // Determine slide direction based on day order
+            const currentIndex = dayOrder.indexOf(currentDay);
+            const nextIndex = dayOrder.indexOf(day);
+            const slideRight = nextIndex > currentIndex;
 
-            currentTimetable.style.transform = `translateX(${-100 * direction}%)`;
-            nextTimetable.style.transform = `translateX(${100 * direction}%)`;
+            // Reset any existing transition classes
+            currentTimetable.classList.remove('slide-left', 'slide-right');
+            nextTimetable.classList.remove('slide-left', 'slide-right');
 
+            // Show next timetable and set initial position
             nextTimetable.classList.remove('hidden');
-            setTimeout(() => {
+            nextTimetable.style.transform = `translateX(${slideRight ? '100%' : '-100%'})`;
+
+            // Force reflow
+            void nextTimetable.offsetWidth;
+
+            // Animate both timetables
+            requestAnimationFrame(() => {
+                currentTimetable.style.transform = `translateX(${slideRight ? '-100%' : '100%'})`;
                 nextTimetable.style.transform = 'translateX(0)';
-                nextTimetable.classList.add('active');
-                currentTimetable.classList.remove('active');
-                currentTimetable.classList.add('hidden');
-                currentDay = day;
-            }, 500);
+                nextTimetable.style.opacity = '1';
+
+                setTimeout(() => {
+                    currentTimetable.classList.add('hidden');
+                    currentTimetable.classList.remove('active');
+                    nextTimetable.classList.add('active');
+                    currentDay = day;
+                }, 500);
+            });
 
             // Update active button state
             document.querySelectorAll('.day-buttons button').forEach(button => {
@@ -243,21 +518,48 @@
             const dayName = days[today];
             if (document.getElementById(dayName)) {
                 showTimetable(dayName);
+            } else {
+                showTimetable('monday'); // Default to Monday if today is Sunday
             }
         }
 
         function updateClock() {
             const clockElement = document.getElementById('live-clock');
             const now = new Date();
-            clockElement.textContent = `Today's Date: ${now.toDateString()}, Current Time: ${now.toLocaleTimeString()}`;
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            clockElement.textContent = `${now.toLocaleDateString(undefined, options)}, ${now.toLocaleTimeString()}`;
+        }
+        function toggleTheme() {
+            const body = document.documentElement;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
+
+            const themeIcon = document.querySelector('.theme-icon');
+            themeIcon.textContent = newTheme === 'dark' ? '🌙' : '☀️';
+
+            // Save theme preference
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme preference
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                const themeIcon = document.querySelector('.theme-icon');
+                themeIcon.textContent = savedTheme === 'dark' ? '🌙' : '☀️';
+            }
         }
 
         setInterval(updateClock, 1000);
 
         window.onload = () => {
+            loadTheme();
             showTodayTimetable();
             updateClock();
         };
     </script>
 </body>
+
 </html>
