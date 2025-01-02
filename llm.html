@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A15 Timetable</title>
+    <style>
+        :root {
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #e9ecef;
+            --text-primary: #333;
+            --text-secondary: #555;
+            --table-bg: white;
+            --table-border: #ccc;
+            --header-bg: #f4f4f4;
+            --button-bg: #007BFF;
+            --button-hover: #0056b3;
+            --active-button: #28a745;
+            --ongoing-class-bg: #ffeb3b;
+            --transition-speed: 0.3s;
+            --notification-bg: #f8d7da;
+            --notification-text: #721c24;
+        }
+
+
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --table-bg: #2d2d2d;
+            --table-border: #404040;
+            --header-bg: #333333;
+            --button-bg: #0056b3;
+            --button-hover: #007BFF;
+            --active-button: #218838;
+            --notification-bg: #1e1e1e;
+            --notification-text: #ff6b6b;
+        }
+
+        * {
+            transition: background-color var(--transition-speed) ease,
+                color var(--transition-speed) ease,
+                border-color var(--transition-speed) ease,
+                box-shadow var(--transition-speed) ease;
+        }
+
+
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, var(--bg-primary), var(--bg-secondary));
+            color: var(--text-primary);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--button-bg);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease;
+            z-index: 1000;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+            background: var(--button-hover);
+        }
+
+        .theme-icon {
+            font-size: 16px;
+        }
+
+        .notification {
+            background-color: var(--notification-bg);
+            color: var(--notification-text);
+            padding: 10px 20px;
+            margin: 10px auto;
+            border-radius: 5px;
+            max-width: 600px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-weight: bold;
+        }
+
+        .notification.show {
+            opacity: 1;
+        }
+
+
+        .creator {
+            margin: 10px 0 20px;
+            font-size: clamp(12px, 2.5vw, 14px);
+            color: var(--text-secondary);
+        }
+
+        .heart {
+            color: #ff4d4d;
+            display: inline-block;
+            animation: heartBeat 1.2s infinite;
+        }
+
+        @keyframes heartBeat {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        h1 {
+            padding: 15px;
+            margin: 0;
+            font-size: clamp(24px, 5vw, 32px);
+            color: var(--text-primary);
+        }
+
+        .day-buttons {
+            margin: 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 10px;
+        }
+
+        .day-buttons button {
+            flex: 1;
+            min-width: 80px;
+            max-width: 120px;
+            padding: 12px 8px;
+            font-size: clamp(14px, 3vw, 16px);
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--button-bg);
+            color: white;
+            transition: transform 0.2s, background-color var(--transition-speed) ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .day-buttons button:hover {
+            background-color: var(--button-hover);
+            transform: scale(1.05);
+        }
+
+        .day-buttons button.active {
+            background-color: var(--active-button);
+        }
+
+        .timetable-container {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            min-height: 400px;
+        }
+
+        .timetable {
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0;
+            transform: translateX(100%);
+            transition: transform 0.5s ease-in-out;
+            opacity: 0;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+        .timetable.active {
+            transform: translateX(0);
+            opacity: 1;
+            position: relative;
+        }
+
+        .timetable.slide-left {
+            transform: translateX(-100%);
+        }
+
+        .timetable.slide-right {
+            transform: translateX(100%);
+        }
+
+        .timetable.hidden {
+            display: none;
+        }
+
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: var(--table-bg);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th,td {
+            border: 1px solid var(--table-border);
+            padding: 12px 8px;
+            text-align: center;
+            font-size: clamp(12px, 2.5vw, 14px);
+            color: var(--text-primary);
+        }
+
+        th {
+            background-color: var(--header-bg);
+            font-weight: bold;
+        }
+
+        .live-clock {
+            margin: 20px 0;
+            font-size: clamp(14px, 3vw, 16px);
+            color: var(--text-primary);
+            padding: 10px;
+            background-color: var(--table-bg);
+            border-radius: 20px;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .ongoing {
+            background-color: var(--ongoing-class-bg);
+            font-weight: bold;
+        }
+
+        .creator {
+            margin: 10px 0 20px;
+            font-size: clamp(12px, 2.5vw, 14px);
+            color: var(--text-secondary);
+        }
+
+        .timetable-container {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            min-height: 400px;
+        }
+
+        .timetable {
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0;
+            transform: translateX(100%);
+            transition: transform 0.5s ease-in-out;
+            opacity: 0;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+        .timetable.active {
+            transform: translateX(0);
+            opacity: 1;
+            position: relative;
+        }
+
+        .timetable.slide-left {
+            transform: translateX(-100%);
+        }
+
+        .timetable.slide-right {
+            transform: translateX(100%);
+        }
+
+        .timetable.hidden {
+            display: none;
+        }
+
+        @media screen and (max-width: 480px) {
+
+            th,
+            td {
+                padding: 8px 4px;
+            }
+
+            .timetable-container {
+                min-height: 300px;
+            }
+
+            .theme-toggle {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+        }
+
+        @media screen and (max-width: 360px) {
+            .day-buttons button {
+                min-width: 70px;
+                padding: 8px 4px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <span class="theme-icon">☀️</span>
+        <span class="theme-text">Toggle Theme</span>
+    </button>
+    <h1>A15 Timetable</h1>
+    <div class="day-buttons">
+        <button onclick="showTimetable('monday')" id="btn-monday">Monday</button>
+        <button onclick="showTimetable('tuesday')" id="btn-tuesday">Tuesday</button>
+        <button onclick="showTimetable('wednesday')" id="btn-wednesday">Wednesday</button>
+        <button onclick="showTimetable('thursday')" id="btn-thursday">Thursday</button>
+        <button onclick="showTimetable('friday')" id="btn-friday">Friday</button>
+        <button onclick="showTimetable('saturday')" id="btn-saturday">Saturday</button>
+    </div>
+
+    <div class="timetable-container">
+        <div id="monday" class="timetable hidden">
+            <h2>Monday</h2>
+            <table>
+                <tr>
+                    <th>Time</th>
+                    <th>Class</th>
+                    <th>Type</th>
+                    <th>Teacher</th>
+                    <th>Room</th>
+                </tr>
+                <tr>
+                    <td>9:00 - 10:50</td>
+                    <td>SDF</td>
+                    <td>Practical</td>
+                    <td>Dr.Amanpreet Kaur</td>
+                    <td>CL01(ABB3)</td>
+                </tr>
+                <tr>
+                    <td>11:00 - 11:50</td>
+                    <td>PHYSICS</td>
+                    <td>Lecture</td>
+                    <td>Prof. Sandeep Chhoker</td>
+                    <td>FF1(ABB1)</td>
+                </tr>
+                <tr>
+                    <td>1:00 - 2:50</td>
+                    <td>LIFE SKILL</td>
+                    <td>Practical</td>
+                    <td>Dr. Manas</td>
+                    <td>LL</td>
+                </tr>
+                <tr>
+                    <td>3:00 - 3:50</td>
+                    <td>MATHEMATICS</td>
+                    <td>Lecture</td>
+                    <td>Dr. Nisha Shukla</td>
+                    <td>FF1(ABB1)</td>
+                </tr>
+                <tr>
+                    <td>4:00 - 4:50</td>
+                    <td>SDF</td>
+                    <td>Lecture</td>
+                    <td>Dr. Taj Alam</td>
+                    <td>FF1(ABB1)</td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="tuesday" class="timetable hidden">
+            <h2>Tuesday</h2>
+            <table>
+                <tr>
+                    <th>Time</th>
+                    <th>Class</th>
+                    <th>Type</th>
+                    <th>Teacher</th>
+                    <th>Room</th>
+                </tr>
+                <tr>
+                    <td>9:00 - 11:50</td>
+                    <td>Engineering Drawing</td>
+                    <td>Practical</td>
+                    <td>Mr. Chandan Kumar</td>
+                    <td>CAD2</td>
+                </tr>
+                <tr>
+                    <td>2:00 - 2:50</td>
+                    <td>MATHEMATICS</td>
+                    <td>Lecture</td>
+                    <td>Dr. Nisha Shukla</td>
+                    <td>FF2(ABB1)</td>
+                </tr>
+                <tr>
+                    <td>3:00 - 3:50</td>
+                    <td>SDF</td>
+                    <td>Lecture</td>
+                    <td>Dr. Taj Alam</td>
+                    <td>G1(ABB1)</td>
+                </tr>
+                <tr>
+                    <td>4:00 - 4:50</td>
+                    <td>PHYSICS</td>
+                    <td>Lecture</td>
+                    <td>Prof. Sandeep Chhoker</td>
+                    <td>G1(ABB1)</td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="wednesday" class="timetable hidden">
+            <h2>Wednesday</h2>
+            <table>
+                <tr>
+                    <th>Time</th>
+                    <th>Class</th>
+                    <th>Type</th>
+                    <th>Teacher</th>
+                    <th>Room</th>
+                </tr>
+                <tr>
+                    <td>9:00 - 9:50</td>
+                    <td>UHV</td>
+                    <td>Lecture</td>
+                    <td>SHS</td>
+                    <td>FF4(ABB1)</td>
+                </tr>
+                <tr>
+                    <td>10:00 - 10:50</td>
+                    <td>PHYSICS</td>
+                    <td>Lecture</td>
+                    <td>Prof. Sandeep Chhoker</td>
+                    <td>G3(ABB1)</td>
+                </tr>
+                <tr>
+                    <td>2:00 - 2:50</td>
+                    <td>MATHEMATICS</td>
+                    <td>Lecture</td>
+                    <td>Dr. Nisha Shukla</td>
+                    <td>G3(ABB1)</td>
+                </tr>
+                <tr>
+                    <td>3:00 - 4:50</td>
+                    <td>PHYSICS</td>
+                    <td>Practical</td>
+                    <td>Dr.Radha Krishna Gopal</td>
+                    <td>PL1(ABB1)</td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="thursday" class="timetable hidden">
+            <h2>Thursday</h2>
+            <table>
+                <tr>
+                    <th>Time</th>
+                    <th>Class</th>
+                    <th>Type</th>
+                    <th>Teacher</th>
+                    <th>Room</th>
+                </tr>
+                <tr>
+                    <td>11:00 - 11:50</td>
+                    <td>UHV</td>
+                    <td>Tutorial</td>
+                    <td>Dr. Ila Joshi</td>
+                    <td>TS7(ABB1)</td>
+                </tr>
+                
+            </table>
+        </div>
+
+        <div id="friday" class="timetable hidden">
+            <h2>Friday</h2>
+            <table>
+                <tr>
+                    <th>Time</th>
+                    <th>Class</th>
+                    <th>Type</th>
+                    <th>Teacher</th>
+                    <th>Room</th>
+                </tr>
+                <tr>
+                    <td>10:00 - 10:50</td>
+                    <td>UHV</td>
+                    <td>Lecture</td>
+                    <td>SHS</td>
+                    <td>FF4(ABB1)</td>
+                </tr>
+                <tr>
+                    <td>11:00 - 11:50</td>
+                    <td>PHYSICS</td>
+                    <td>Tutorial</td>
+                    <td>Dr. Bhupesh Chandra Joshi</td>
+                    <td>TS11(ABB1)</td>
+                </tr>
+                <tr>
+                    <td>3:00 - 3:50</td>
+                    <td>MATHEMATICS</td>
+                    <td>Tutorial</td>
+                    <td>Dr. Yogesh Gupta</td>
+                    <td>TS6(ABB1)</td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="saturday" class="timetable hidden">
+            <h2>Saturday</h2>
+            <table>
+                <tr>
+                    <th>Time</th>
+                    <th>Class</th>
+                    <th>Type</th>
+                    <th>Teacher</th>
+                    <th>Room</th>
+                </tr>
+                <tr>
+                    <td>11:00 - 11:50</td>
+                    <td>SDF</td>
+                    <td>Lecture</td>
+                    <td> Dr. Taj Alam</td>
+                    <td>G1(ABB1)</td>
+                </tr>
+                <tr>
+                    <td>12:00 - 12:50</td>
+                    <td>SDF</td>
+                    <td>Tutorial</td>
+                    <td>Ms. Neha</td>
+                    <td>TS6(ABB1)</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="live-clock" id="live-clock"></div>
+    <div class="notification" id="notification"></div>
+    <div class="creator">Made with <span class="heart">♥</span></div>
+
+    <script>
+        let currentDay = "monday";
+        const dayOrder = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+        
+        function getTimeInMinutes(timeStr) {
+            const [hours, minutes] = timeStr.split(':').map(Number);
+            return hours * 60 + minutes;
+        }
+
+        function formatTimeFromMinutes(minutes) {
+            const hours = Math.floor(minutes / 60);
+            const mins = minutes % 60;
+            return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+        }
+
+
+
+        function checkClasses() {
+            const now = new Date();
+            const currentMinutes = now.getHours() * 60 + now.getMinutes();
+            const todayTimetable = document.getElementById(currentDay);
+            if (!todayTimetable) return;
+
+            const rows = todayTimetable.querySelectorAll('tr');
+            let nextClassMessage = '';
+            let hasOngoingClass = false;
+            let allClassesEnded = true;
+            let earliestNextClass = Infinity;
+            let earliestNextClassInfo = null;
+
+            // Skip header row by starting from index 1
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                const timeCell = row.cells[0];
+                if (!timeCell) continue;
+
+                const [startTimeStr, endTimeStr] = timeCell.textContent.split(' - ');
+                const startTime = getTimeInMinutes(startTimeStr);
+                const endTime = getTimeInMinutes(endTimeStr);
+
+                // Check for ongoing class
+                if (currentMinutes >= startTime && currentMinutes <= endTime) {
+                    row.classList.add('ongoing');
+                    hasOngoingClass = true;
+                    allClassesEnded = false;
+
+                    const remainingMinutes = endTime - currentMinutes;
+                    const classInfo = `${row.cells[1].textContent} (${remainingMinutes} minutes remaining)`;
+                    showNotification(`Current class: ${classInfo}`);
+                } else {
+                    row.classList.remove('ongoing');
+                    
+                    // Track next upcoming class
+                    if (startTime > currentMinutes && startTime < earliestNextClass) {
+                        earliestNextClass = startTime;
+                        earliestNextClassInfo = {
+                            name: row.cells[1].textContent,
+                            time: startTimeStr,
+                            minutes: startTime - currentMinutes
+                        };
+                    }
+
+                    // Update allClassesEnded flag
+                    if (endTime > currentMinutes) {
+                        allClassesEnded = false;
+                    }
+                }
+            }
+
+            // Handle notifications based on class status
+            if (allClassesEnded && !hasOngoingClass) {
+                showNotification('All classes have ended for today');
+                checkAndSwitchToNextDay(now);
+            } else if (earliestNextClassInfo && !hasOngoingClass) {
+                showNotification(`Next class: ${earliestNextClassInfo.name} at ${earliestNextClassInfo.time} (in ${earliestNextClassInfo.minutes} minutes)`);
+            }
+        }
+
+        // Enhanced notification system
+        function showNotification(message) {
+            const notificationElement = document.getElementById('notification');
+            notificationElement.textContent = message;
+            notificationElement.classList.add('show');
+
+            // Optional: Hide notification after some time
+            setTimeout(() => {
+                notificationElement.classList.remove('show');
+            }, 10000); // Hide after 10 seconds
+        }
+
+        // Function to handle day switching
+        function checkAndSwitchToNextDay(now) {
+            const currentHour = now.getHours();
+            const currentMinutes = now.getMinutes();
+            
+            // Switch to next day if it's after 11 PM or before 1 AM
+            if (currentHour >= 23 || (currentHour === 0 && currentMinutes < 60)) {
+                const currentIndex = dayOrder.indexOf(currentDay);
+                const nextDayIndex = (currentIndex + 1) % dayOrder.length;
+                const nextDay = dayOrder[nextDayIndex];
+                
+                // Only switch if we're not already on the next day
+                if (nextDay !== currentDay) {
+                    showTimetable(nextDay);
+                    showNotification(`Switched to ${nextDay.charAt(0).toUpperCase() + nextDay.slice(1)}'s timetable`);
+                }
+            }
+        }
+
+        // Enhanced showTimetable function with smooth transitions
+        function showTimetable(day) {
+            if (day === currentDay) return;
+
+            const currentTimetable = document.getElementById(currentDay);
+            const nextTimetable = document.getElementById(day);
+            
+            if (!currentTimetable || !nextTimetable) return;
+
+            const currentIndex = dayOrder.indexOf(currentDay);
+            const nextIndex = dayOrder.indexOf(day);
+            const slideRight = nextIndex > currentIndex;
+
+            // Reset transitions
+            currentTimetable.style.transition = 'transform 0.5s ease-in-out, opacity 0.5s ease-in-out';
+            nextTimetable.style.transition = 'transform 0.5s ease-in-out, opacity 0.5s ease-in-out';
+
+            // Prepare next timetable
+            nextTimetable.classList.remove('hidden');
+            nextTimetable.style.transform = `translateX(${slideRight ? '100%' : '-100%'})`;
+            nextTimetable.style.opacity = '0';
+
+            // Force reflow
+            void nextTimetable.offsetWidth;
+
+            // Animate transition
+            requestAnimationFrame(() => {
+                currentTimetable.style.transform = `translateX(${slideRight ? '-100%' : '100%'})`;
+                currentTimetable.style.opacity = '0';
+                nextTimetable.style.transform = 'translateX(0)';
+                nextTimetable.style.opacity = '1';
+
+                // Update state after animation
+                setTimeout(() => {
+                    currentTimetable.classList.add('hidden');
+                    currentDay = day;
+                    updateActiveButton();
+                    checkClasses();
+                }, 500);
+            });
+        }
+
+        // Function to update active button state
+        function updateActiveButton() {
+            document.querySelectorAll('.day-buttons button').forEach(button => {
+                button.classList.remove('active');
+            });
+            const activeButton = document.getElementById(`btn-${currentDay}`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+        }
+
+        // Enhanced clock update function
+        function updateClock() {
+            const clockElement = document.getElementById('live-clock');
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            clockElement.textContent = now.toLocaleString(undefined, options);
+        }
+
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.documentElement;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
+
+            const themeIcon = document.querySelector('.theme-icon');
+            themeIcon.textContent = newTheme === 'dark' ? '🌙' : '☀️';
+
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                const themeIcon = document.querySelector('.theme-icon');
+                themeIcon.textContent = savedTheme === 'dark' ? '🌙' : '☀️';
+            }
+        }
+
+        // Show current day's timetable
+        function showTodayTimetable() {
+            const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+            const today = new Date().getDay();
+            const dayName = days[today];
+            
+            // Show appropriate timetable based on current day
+            if (document.getElementById(dayName)) {
+                showTimetable(dayName);
+            } else {
+                showTimetable('monday'); // Default to Monday if today is Sunday
+            }
+        }
+
+        // Initialize everything when the page loads
+        window.onload = () => {
+            loadTheme();
+            showTodayTimetable();
+            updateClock();
+            checkClasses();
+
+            // Set up periodic updates
+            setInterval(() => {
+                updateClock();
+                checkClasses();
+            }, 60000); // Update every minute
+        };
+    </script>
+</body>
+
+</html>
