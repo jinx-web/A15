@@ -1,93 +1,100 @@
+
 // ==========================================
 // USER CONFIGURATION SECTION
-// Edit your schedule and electives here
 // ==========================================
+
 // Elective Subjects Configuration
-// Format: "key": { name: "Display Name", room: "Room Number", teacher: "Teacher Name" }
 const electives = {
     "management": { name: "Principles of Management", room: "Block B-101", teacher: "Dr. Roberts" },
     "cloud": { name: "Cloud Computing", room: "Lab 3", teacher: "Prof. Alan" },
     "mining": { name: "Data Mining", room: "Lab 2", teacher: "Ms. Davis" },
     "spanish": { name: "Spanish Language", room: "Lang Lab", teacher: "Mrs. Garcia" }
 };
-// Weekly Schedule Configuration
-// Days: 1=Monday, 2=Tuesday, 3=Wednesday, 4=Thursday, 5=Friday, 6=Saturday
-// Types: "core" or "elective"
-// For electives, the subject, room, and teacher will be filled dynamically
+
+// Weekly Schedule Configuration (1=Mon, ..., 6=Sat)
 const schedule = {
     1: [ // Monday
-        { start: "09:00", end: "10:00", subject: "Computer Networks", room: "Room 304", teacher: "Mr. Wilson", type: "core" },
-        { start: "10:00", end: "11:00", subject: "Database Systems", room: "Lab 1", teacher: "Ms. Lee", type: "core" },
-        { start: "11:00", end: "11:15", subject: "Morning Break", room: "-", teacher: "-", type: "break" },
-        { start: "11:15", end: "12:15", subject: "ELECTIVE", type: "elective" }, // Dynamic Slot
-        { start: "12:15", end: "13:15", subject: "Software Engineering", room: "Room 304", teacher: "Dr. James", type: "core" },
-        { start: "13:15", end: "14:00", subject: "Lunch Break", room: "Cafeteria", teacher: "-", type: "break" }
+        { start: "09:00", end: "09:50", subject: "Intro. to Microfabrication Technology", room: "FF-6", teacher: "Dr. Shivani", type: "core" },
+        { start: "10:00", end: "10:50", subject: "ELECTIVE", type: "elective" },
+        { start: "11:00", end: "11:50", subject: "Analog Electronic Circuits", room: "FF-8", teacher: "Dr. NITIN MUCHHAL", type: "core" },
+        { start: "14:00", end: "14:50", subject: "Analog Electronic Circuits", room: "FF-5", teacher: "Dr. NITIN MUCHHAL", type: "core" }, 
     ],
     2: [ // Tuesday
-        { start: "09:00", end: "11:00", subject: "Web Development Lab", room: "Lab 4", teacher: "Mr. Smith", type: "core" },
-        { start: "11:00", end: "11:15", subject: "Morning Break", room: "-", teacher: "-", type: "break" },
-        { start: "11:15", end: "12:15", subject: "Operating Systems", room: "Room 202", teacher: "Prof. White", type: "core" },
-        { start: "12:15", end: "13:15", subject: "ELECTIVE", type: "elective" },
-        { start: "13:15", end: "14:00", subject: "Lunch Break", room: "Cafeteria", teacher: "-", type: "break" },
-        { start: "14:00", end: "15:00", subject: "Library Hour", room: "Library", teacher: "-", type: "core" }
+        { start: "09:00", end: "10:50", subject: "Introduction to Microfabrication Lab", room: "ABB-3, 4th Floor FABLAB", teacher: "Dr. HEMANT KUMAR", type: "core" },
+        { start: "11:00", end: "11:50", subject: "Communication Engineering", room: "G-3", teacher: "Dr. NEETU JOSHI", type: "core" },
+        { start: "15:00", end: "15:50", subject: "FUNDAMENTALS OF EMBEDDED SYSTEMS", room: "FF-8", teacher: "Dr. Shivani", type: "core" },
+        { start: "16:00", end: "16:50", subject: "Discrete Signal Processing", room: "FF-6", teacher: "Dr. KULDEEP BADERIA", type: "core" },
+        
     ],
     3: [ // Wednesday
-        { start: "09:00", end: "10:00", subject: "Artificial Intelligence", room: "Room 105", teacher: "Dr. K.", type: "core" },
-        { start: "10:00", end: "11:00", subject: "Computer Networks", room: "Room 304", teacher: "Mr. Wilson", type: "core" },
-        { start: "11:00", end: "11:15", subject: "Break", room: "-", teacher: "-", type: "break" },
-        { start: "11:15", end: "13:15", subject: "Project Work", room: "Project Lab", teacher: "Various", type: "core" },
-        { start: "13:15", end: "14:00", subject: "Lunch", room: "Cafeteria", teacher: "-", type: "break" }
+        { start: "09:00", end: "10:50", subject: "Introduction to Microfabrication Lab", room: "ABB-3, 4th Floor FABLAB", teacher: "Dr. HEMANT KUMAR", type: "core" },
+        { start: "11:00", end: "12:50", subject: "ANALOG ELECTRONIC CIRCUITS LAB", room: "ABB-2,3rd FLoor, Analog and Digital Electronics Lab", teacher: "Dr. BHUVANESHWARI SHANKAR", type: "core" },
+        { start: "16:00", end: "16:50", subject: "Analog Electronic Circuits", room: "FF-7", teacher: "Dr. NITIN MUCHHAL", type: "core" }
     ],
     4: [ // Thursday
-        { start: "09:00", end: "10:00", subject: "Software Engineering", room: "Room 304", teacher: "Dr. James", type: "core" },
-        { start: "10:00", end: "11:00", subject: "ELECTIVE", type: "elective" },
-        { start: "11:00", end: "11:15", subject: "Break", room: "-", teacher: "-", type: "break" },
-        { start: "11:15", end: "12:15", subject: "Operating Systems", room: "Room 202", teacher: "Prof. White", type: "core" },
-        { start: "12:15", end: "14:00", subject: "Sports / Gym", room: "Ground", teacher: "Coach", type: "core" }
+        { start: "11:00", end: "11:50", subject: "Communication Engineering", room: "FF-6", teacher: "Dr. NEETU JOSHI", type: "core" },
+        { start: "12:00", end: "12:50", subject: "FUNDAMENTALS OF EMBEDDED SYSTEMS", room: "FF-8", teacher: "Dr. Shivani", type: "core" },
+        { start: "15:00", end: "15:50", subject: "Discrete Signal Processing", room: "FF-1", teacher: "Dr. KULDEEP BADERIA", type: "core" },
+        
     ],
     5: [ // Friday
-        { start: "09:00", end: "10:00", subject: "Database Systems", room: "Lab 1", teacher: "Ms. Lee", type: "core" },
-        { start: "10:00", end: "11:00", subject: "Artificial Intelligence", room: "Room 105", teacher: "Dr. K.", type: "core" },
-        { start: "11:00", end: "11:15", subject: "Break", room: "-", teacher: "-", type: "break" },
-        { start: "11:15", end: "12:15", subject: "Mentoring", room: "Staff Room", teacher: "Mentor", type: "core" },
-        { start: "12:15", end: "13:15", subject: "ELECTIVE", type: "elective" }
+        { start: "11:00", end: "12:50", subject: "Intro. to VLSI lifecycle", room: "ABB-3,5th-Floor SPL", teacher: "Dr. GARIMA KAPUR", type: "core" },
+        { start: "14:00", end: "14:50", subject: "Intro. to Microfabrication Technology", room: "G-3", teacher: "Dr. Shivani", type: "core" },
+        { start: "15:00", end: "15:50", subject: "FUNDAMENTALS OF EMBEDDED SYSTEMS", room: "FF-7", teacher: "Dr. Shivani", type: "core" },
+        
     ],
     6: [ // Saturday
-        { start: "09:00", end: "12:00", subject: "Hackathon / Workshops", room: "Auditorium", teacher: "Guest", type: "core" }
+        { start: "09:00", end: "09:50", subject: "Communication Engineering", room: "CR325", teacher: "Dr. NEETU JOSHI", type: "core" },
+        { start: "10:00", end: "10:50", subject: "Intro. to Microfabrication Technology", room: "FF-7", teacher: "Dr. Shivani", type: "core" },
+        { start: "11:00", end: "11:50", subject: "Discrete Signal Processing", room: "FF-7", teacher: "Dr. KULDEEP BADERIA", type: "core" },
+        { start: "12:00", end: "12:50", subject: "Introduction to Microfabrication Lab", room: "ABB-3, 4th Floor FABLAB", teacher: "Dr. HEMANT KUMAR", type: "core" },
+        
     ]
 };
+
 // ==========================================
-// LOGIC SECTION
+// LOGIC
 // ==========================================
-// Constants
-const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+const DAYS = ["Sun", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const SHORT_DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
 // State
 let currentDayIndex = new Date().getDay();
-// If Sunday (0), default to Monday (1)
-if (currentDayIndex === 0) currentDayIndex = 1;
+let viewingDayIndex = currentDayIndex === 0 ? 1 : currentDayIndex; // Default to Mon if Sun
 let selectedElective = localStorage.getItem('selectedElective') || "";
+
 // DOM Elements
 const dayTabsContainer = document.getElementById('day-tabs');
 const scheduleContainer = document.getElementById('schedule-container');
 const electiveSelect = document.getElementById('elective-select');
-const themeToggleBtn = document.getElementById('theme-toggle');
-const sunIcon = document.getElementById('sun-icon');
-const moonIcon = document.getElementById('moon-icon');
+const statusCard = document.getElementById('status-card');
 const htmlEl = document.documentElement;
-// Initialization
+
 function init() {
+    setupTheme();
     setupElectives();
     renderTabs();
-    renderSchedule(currentDayIndex);
-    setupTheme();
-    updateTimeAndStatus();
+    renderSchedule(viewingDayIndex);
+    updateStatus();
+    setInterval(updateStatus, 1000); // Live clock
     
-    // Update status every second
-    setInterval(updateTimeAndStatus, 1000);
+    // Sync across tabs
+    window.addEventListener('storage', (e) => {
+        if (e.key === 'selectedElective') {
+            selectedElective = e.newValue;
+            electiveSelect.value = selectedElective;
+            renderSchedule(viewingDayIndex);
+            updateStatus();
+        }
+        if (e.key === 'theme') {
+            applyTheme(e.newValue);
+        }
+    });
 }
-// 1. Setup Electives Dropdown
+
 function setupElectives() {
+    electiveSelect.innerHTML = '<option value="" disabled selected>Select Subject...</option>';
     for (const [key, data] of Object.entries(electives)) {
         const option = document.createElement('option');
         option.value = key;
@@ -95,258 +102,296 @@ function setupElectives() {
         if (key === selectedElective) option.selected = true;
         electiveSelect.appendChild(option);
     }
+    
     electiveSelect.addEventListener('change', (e) => {
         selectedElective = e.target.value;
         localStorage.setItem('selectedElective', selectedElective);
-        renderSchedule(currentDayIndex); // Re-render to update elective slots
-        updateTimeAndStatus(); // Update current status immediately
+        renderSchedule(viewingDayIndex);
+        updateStatus();
     });
 }
-// 2. Render Day Tabs
+
 function renderTabs() {
     dayTabsContainer.innerHTML = '';
-    
-    // Render Mon (1) to Sat (6)
+    const today = new Date().getDay();
+
     for (let i = 1; i <= 6; i++) {
         const btn = document.createElement('button');
-        btn.textContent = SHORT_DAYS[i];
-        btn.className = `px-5 py-2 rounded-full text-sm font-medium border transition-all duration-200 whitespace-nowrap 
-            ${currentDayIndex === i 
-                ? 'bg-blue-600 text-white border-blue-600 shadow-md transform scale-105' 
-                : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'}`;
+        const isActive = viewingDayIndex === i;
+        const isToday = today === i;
+        
+        btn.className = `flex-none snap-start px-4 py-2 rounded-lg text-sm font-medium border transition-all ${
+            isActive 
+            ? 'day-tab-active shadow-md' 
+            : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700'
+        }`;
+        
+        btn.innerHTML = `
+            ${SHORT_DAYS[i]}
+            ${isToday ? '<span class="ml-1 text-indigo-500 font-bold">•</span>' : ''}
+        `;
         
         btn.onclick = () => {
-            currentDayIndex = i;
+            viewingDayIndex = i;
             renderTabs();
             renderSchedule(i);
         };
         
         dayTabsContainer.appendChild(btn);
+        
+        // Auto scroll to active tab
+        if (isActive) {
+            setTimeout(() => {
+                btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            }, 100);
+        }
     }
 }
-// 3. Render Schedule List
+
 function renderSchedule(dayIndex) {
     scheduleContainer.innerHTML = '';
-    
-    const todaysClasses = schedule[dayIndex];
-    
-    if (!todaysClasses || todaysClasses.length === 0) {
+    const classes = schedule[dayIndex];
+
+    if (!classes || classes.length === 0) {
         scheduleContainer.innerHTML = `
-            <div class="text-center py-10 text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 rounded-xl border border-dashed border-gray-300 dark:border-gray-700">
-                <p>No classes scheduled for this day.</p>
+            <div class="text-center py-10 opacity-50">
+                <p>No classes scheduled.</p>
             </div>
         `;
         return;
     }
-    todaysClasses.forEach((slot, index) => {
-        let displaySubject = slot.subject;
-        let displayRoom = slot.room;
-        let displayTeacher = slot.teacher;
-        let isElectiveSlot = false;
-        // Handle Elective Slot
+
+    const now = new Date();
+    const currentMins = now.getHours() * 60 + now.getMinutes();
+    const isToday = dayIndex === now.getDay();
+
+    classes.forEach(slot => {
+        let subject = slot.subject;
+        let room = slot.room;
+        let teacher = slot.teacher;
+        
         if (slot.type === 'elective') {
-            isElectiveSlot = true;
             if (selectedElective && electives[selectedElective]) {
-                const elecData = electives[selectedElective];
-                displaySubject = elecData.name;
-                displayRoom = elecData.room;
-                displayTeacher = elecData.teacher;
+                const el = electives[selectedElective];
+                subject = el.name;
+                room = el.room;
+                teacher = el.teacher;
             } else {
-                displaySubject = "Elective (Select Subject)";
-                displayRoom = "Check Selection";
-                displayTeacher = "-";
+                subject = "Elective (Select Subject)";
+                room = "-";
+                teacher = "-";
             }
         }
-        const card = document.createElement('div');
-        card.className = `schedule-card relative p-4 rounded-xl border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between group`;
-        card.dataset.start = slot.start;
-        card.dataset.end = slot.end;
+
+        const startMins = timeToMinutes(slot.start);
+        const endMins = timeToMinutes(slot.end);
+        const isActive = isToday && currentMins >= startMins && currentMins < endMins;
+
+        const el = document.createElement('div');
+        el.className = `bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm flex gap-4 transition-all ${isActive ? 'card-active ring-1 ring-indigo-500' : ''}`;
         
-        // Visual indicator for type
-        const indicatorColor = slot.type === 'break' ? 'bg-green-400' : (isElectiveSlot ? 'bg-purple-500' : 'bg-blue-500');
-        
-        card.innerHTML = `
-            <div class="flex items-center gap-4 w-full sm:w-auto">
-                <div class="h-12 w-1 rounded-full ${indicatorColor}"></div>
-                <div>
-                    <h3 class="font-bold text-lg text-gray-800 dark:text-white leading-tight">${displaySubject}</h3>
-                    <div class="text-sm text-gray-500 dark:text-gray-400 mt-1 flex flex-wrap gap-x-4">
-                        ${slot.type !== 'break' ? `
-                            <span class="flex items-center gap-1">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                ${displayRoom}
-                            </span>
-                            <span class="flex items-center gap-1">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                                ${displayTeacher}
-                            </span>
-                        ` : '<span class="italic text-green-600 dark:text-green-400">Relax & Recharge</span>'}
-                    </div>
-                </div>
+        el.innerHTML = `
+            <div class="flex flex-col items-center justify-center min-w-[3.5rem] border-r border-gray-100 dark:border-gray-700 pr-4">
+                <span class="text-xs font-bold text-gray-900 dark:text-white">${formatTime(slot.start)}</span>
+                <span class="text-[10px] text-gray-400 my-1">TO</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">${formatTime(slot.end)}</span>
             </div>
-            <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-t-0 border-gray-100 dark:border-gray-700 pt-3 sm:pt-0 mt-2 sm:mt-0">
-                <div class="text-right">
-                    <p class="font-mono font-semibold text-gray-700 dark:text-gray-300 text-lg whitespace-nowrap">${convertTo12Hour(slot.start)}</p>
-                    <p class="text-xs text-gray-400 uppercase font-medium text-right">Start</p>
-                </div>
-                <div class="h-8 w-px bg-gray-200 dark:bg-gray-600 mx-2 hidden sm:block"></div>
-                <div class="text-right sm:text-left">
-                    <p class="font-mono font-semibold text-gray-500 dark:text-gray-500 text-lg whitespace-nowrap">${convertTo12Hour(slot.end)}</p>
-                    <p class="text-xs text-gray-400 uppercase font-medium text-right sm:text-left">End</p>
+            <div class="flex-1 min-w-0">
+                <h3 class="font-bold text-gray-900 dark:text-white truncate">${subject}</h3>
+                <div class="flex items-center gap-3 mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    <span class="flex items-center gap-1 truncate">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        ${room}
+                    </span>
+                    <span class="flex items-center gap-1 truncate">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                        ${teacher}
+                    </span>
                 </div>
             </div>
         `;
-        
-        scheduleContainer.appendChild(card);
+        scheduleContainer.appendChild(el);
     });
 }
-// 4. Update Time and Status Logic
-function updateTimeAndStatus() {
+
+function updateStatus() {
     const now = new Date();
-    
-    // Update Header Clock
-    const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const dateString = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
-    
-    document.getElementById('current-time').textContent = timeString;
-    document.getElementById('current-date').textContent = dateString;
-    // Check Status
-    const day = now.getDay(); // 0-6
-    const currentTimeVal = now.getHours() * 60 + now.getMinutes();
+    const day = now.getDay();
+    const currentMins = now.getHours() * 60 + now.getMinutes();
+
+    // Update Clock
+    document.getElementById('live-clock').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    // Find current class
     let activeSlot = null;
     let nextSlot = null;
-    
-    // Only check schedule if it's the current day of the week
-    // But for the UI's "What's Happening" section, we usually care about NOW, 
-    // so we only look at today's schedule.
-    
-    const todaysClasses = schedule[day]; // day index matches key
-    if (todaysClasses) {
-        for (let i = 0; i < todaysClasses.length; i++) {
-            const slot = todaysClasses[i];
-            const startVal = timeToMinutes(slot.start);
-            const endVal = timeToMinutes(slot.end);
-            if (currentTimeVal >= startVal && currentTimeVal < endVal) {
+    const classes = schedule[day];
+
+    if (classes) {
+        for (let slot of classes) {
+            const s = timeToMinutes(slot.start);
+            const e = timeToMinutes(slot.end);
+            if (currentMins >= s && currentMins < e) {
                 activeSlot = slot;
                 break;
             }
-            if (currentTimeVal < startVal && !nextSlot) {
-                nextSlot = slot;
-            }
+            if (currentMins < s && !nextSlot) nextSlot = slot;
         }
     }
-    // Update UI based on active slot
-    const statusName = document.getElementById('current-class-name');
-    const statusDetails = document.getElementById('current-class-details');
-    const statusSection = document.getElementById('status-section');
+
+    const nameEl = document.getElementById('current-class-name');
+    const detailsEl = document.getElementById('current-class-details');
+    const timeRemainingEl = document.getElementById('time-remaining');
+    const bar = document.getElementById('class-progress');
+    const pStart = document.getElementById('progress-start');
+    const pEnd = document.getElementById('progress-end');
     const progressContainer = document.getElementById('progress-container');
-    const progressBar = document.getElementById('class-progress');
+    const progressLabels = document.getElementById('progress-labels');
+
     if (activeSlot) {
+        // Show progress bar for active class
+        progressContainer.style.display = 'block';
+        progressLabels.style.display = 'flex';
+        
         let subject = activeSlot.subject;
-        let location = activeSlot.room;
+        let room = activeSlot.room;
         if (activeSlot.type === 'elective') {
-             if (selectedElective && electives[selectedElective]) {
+            if (selectedElective && electives[selectedElective]) {
                 subject = electives[selectedElective].name;
-                location = electives[selectedElective].room;
+                room = electives[selectedElective].room;
             } else {
                 subject = "Elective Slot";
-                location = "Select Subject";
             }
         }
-        statusName.textContent = subject;
-        statusDetails.textContent = activeSlot.type === 'break' 
-            ? "It's break time!" 
-            : `Ongoing in ${location} until ${convertTo12Hour(activeSlot.end)}`;
+
+        nameEl.textContent = subject;
+        detailsEl.textContent = activeSlot.type === 'break' ? "Break Time" : `In ${room}`;
         
-        statusSection.className = `mb-8 p-6 rounded-2xl shadow-lg transform transition-all ${
-            activeSlot.type === 'break' 
-            ? 'bg-gradient-to-r from-green-500 to-emerald-600' 
-            : 'bg-gradient-to-r from-blue-500 to-indigo-600'
-        }`;
-        // Progress Bar
-        progressContainer.classList.remove('hidden');
-        const startVal = timeToMinutes(activeSlot.start);
-        const endVal = timeToMinutes(activeSlot.end);
-        const totalDuration = endVal - startVal;
-        const elapsed = currentTimeVal - startVal;
-        const percentage = Math.min(100, Math.max(0, (elapsed / totalDuration) * 100));
-        progressBar.style.width = `${percentage}%`;
+        // Calculate time remaining
+        const endMins = timeToMinutes(activeSlot.end);
+        const minsLeft = endMins - currentMins;
+        timeRemainingEl.textContent = formatTimeRemaining(minsLeft, "ends in");
+        
+        // Progress
+        const s = timeToMinutes(activeSlot.start);
+        const e = timeToMinutes(activeSlot.end);
+        const pct = ((currentMins - s) / (e - s)) * 100;
+        bar.style.width = `${Math.max(0, Math.min(100, pct))}%`;
+        pStart.textContent = formatTime(activeSlot.start);
+        pEnd.textContent = formatTime(activeSlot.end);
     } else {
-        progressContainer.classList.add('hidden');
-        if (day === 0) { // Sunday
-            statusName.textContent = "It's Sunday!";
-            statusDetails.textContent = "No classes today. Enjoy your weekend.";
-            statusSection.className = 'mb-8 p-6 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg';
-        } else if (currentTimeVal < timeToMinutes("08:00")) {
-            statusName.textContent = "Good Morning!";
-            statusDetails.textContent = "Classes haven't started yet.";
-            statusSection.className = 'mb-8 p-6 rounded-2xl bg-gradient-to-r from-orange-400 to-pink-500 text-white shadow-lg';
-        } else if (nextSlot) {
-            statusName.textContent = "Free Period";
-            let nextSub = nextSlot.subject;
-            if (nextSlot.type === 'elective' && selectedElective && electives[selectedElective]) {
-                nextSub = electives[selectedElective].name;
+        // Hide progress bar when no class is active
+        progressContainer.style.display = 'none';
+        progressLabels.style.display = 'none';
+        
+        if (day === 0) {
+            nameEl.textContent = "Happy Sunday!";
+            detailsEl.textContent = "No classes today";
+            timeRemainingEl.textContent = "Enjoy your day off! 🌟";
+            // Auto-switch to Monday
+            if (viewingDayIndex === 0) {
+                viewingDayIndex = 1;
+                renderTabs();
+                renderSchedule(1);
             }
-            statusDetails.textContent = `Next up: ${nextSub} at ${convertTo12Hour(nextSlot.start)}`;
-            statusSection.className = 'mb-8 p-6 rounded-2xl bg-gradient-to-r from-gray-500 to-gray-600 text-white shadow-lg';
-        } else {
-            statusName.textContent = "Classes Over";
-            statusDetails.textContent = "You're done for the day!";
-            statusSection.className = 'mb-8 p-6 rounded-2xl bg-gradient-to-r from-indigo-800 to-slate-900 text-white shadow-lg';
-        }
-    }
-    // Highlight Active Card if viewing today
-    if (currentDayIndex === day) {
-        const cards = document.querySelectorAll('.schedule-card');
-        cards.forEach(card => {
-            const start = timeToMinutes(card.dataset.start);
-            const end = timeToMinutes(card.dataset.end);
-            if (currentTimeVal >= start && currentTimeVal < end) {
-                card.classList.add('active-card');
+        } else if (currentMins < timeToMinutes("08:00")) {
+            nameEl.textContent = "Good Morning";
+            detailsEl.textContent = "Classes haven't started yet";
+            if (nextSlot) {
+                const startMins = timeToMinutes(nextSlot.start);
+                const minsUntil = startMins - currentMins;
+                timeRemainingEl.textContent = formatTimeRemaining(minsUntil, "starts in");
             } else {
-                card.classList.remove('active-card');
+                timeRemainingEl.textContent = "Have a great day!";
             }
-        });
+        } else if (nextSlot) {
+            let nextSubject = nextSlot.subject;
+            if (nextSlot.type === 'elective') {
+                if (selectedElective && electives[selectedElective]) {
+                    nextSubject = electives[selectedElective].name;
+                } else {
+                    nextSubject = "Elective";
+                }
+            }
+            nameEl.textContent = "Free Period";
+            detailsEl.textContent = `Next: ${nextSubject}`;
+            
+            const startMins = timeToMinutes(nextSlot.start);
+            const minsUntil = startMins - currentMins;
+            timeRemainingEl.textContent = formatTimeRemaining(minsUntil, "starts in");
+        } else {
+            nameEl.textContent = "All Classes Done! 🎉";
+            detailsEl.textContent = "See you tomorrow";
+            timeRemainingEl.textContent = "Great work today!";
+            
+            // Auto-switch to next day
+            let nextDay = day + 1;
+            if (nextDay > 6) nextDay = 1; // Skip to Monday after Saturday
+            if (viewingDayIndex === day) {
+                viewingDayIndex = nextDay;
+                renderTabs();
+                renderSchedule(nextDay);
+            }
+        }
     }
 }
-// 5. Theme Toggle
+
+
+// Helpers
+function timeToMinutes(t) {
+    const [h, m] = t.split(':').map(Number);
+    return h * 60 + m;
+}
+
+function formatTime(t) {
+    let [h, m] = t.split(':');
+    h = parseInt(h);
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    return `${h}:${m} ${ampm}`;
+}
+
+// Theme
 function setupTheme() {
-    // Check local storage or system preference
-    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        htmlEl.classList.add('dark');
-        sunIcon.classList.remove('hidden');
-        moonIcon.classList.add('hidden');
-    } else {
-        htmlEl.classList.remove('dark');
-        sunIcon.classList.add('hidden');
-        moonIcon.classList.remove('hidden');
-    }
-    themeToggleBtn.addEventListener('click', () => {
-        if (htmlEl.classList.contains('dark')) {
-            htmlEl.classList.remove('dark');
-            localStorage.theme = 'light';
-            sunIcon.classList.add('hidden');
-            moonIcon.classList.remove('hidden');
-        } else {
-            htmlEl.classList.add('dark');
-            localStorage.theme = 'dark';
-            sunIcon.classList.remove('hidden');
-            moonIcon.classList.add('hidden');
-        }
+    const saved = localStorage.getItem('theme');
+    if (saved) applyTheme(saved);
+    else if (window.matchMedia('(prefers-color-scheme: dark)').matches) applyTheme('dark');
+
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+        const isDark = htmlEl.classList.contains('dark');
+        applyTheme(isDark ? 'light' : 'dark');
     });
 }
-// Helpers
-function timeToMinutes(timeStr) {
-    const [hours, minutes] = timeStr.split(':').map(Number);
-    return hours * 60 + minutes;
+
+function applyTheme(theme) {
+    if (theme === 'dark') {
+        htmlEl.classList.add('dark');
+        htmlEl.classList.remove('light');
+        document.getElementById('sun-icon').classList.remove('hidden');
+        document.getElementById('moon-icon').classList.add('hidden');
+    } else {
+        htmlEl.classList.remove('dark');
+        htmlEl.classList.add('light');
+        document.getElementById('sun-icon').classList.add('hidden');
+        document.getElementById('moon-icon').classList.remove('hidden');
+    }
+    localStorage.setItem('theme', theme);
 }
-function convertTo12Hour(timeStr) {
-    let [hours, minutes] = timeStr.split(':');
-    hours = parseInt(hours);
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    return `${hours}:${minutes} ${ampm}`;
+
+function formatTimeRemaining(minutes, prefix) {
+    if (minutes >= 60) {
+        const hours = Math.floor(minutes / 60);
+        const mins = minutes % 60;
+        if (mins === 0) {
+            return `${prefix} ${hours} hour${hours > 1 ? 's' : ''}`;
+        }
+        return `${prefix} ${hours}h ${mins}m`;
+    } else if (minutes > 0) {
+        return `${prefix} ${minutes} minute${minutes > 1 ? 's' : ''}`;
+    } else {
+        return `${prefix} < 1 minute`;
+    }
 }
-// Run
+
+// Start
 init();
