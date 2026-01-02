@@ -34,7 +34,7 @@ const coreSchedule = {
         { start: "09:00", end: "09:50", subject: "Communication Engineering", room: "CR325", teacher: "Dr. NEETU JOSHI" },
         { start: "10:00", end: "10:50", subject: "Intro. to Microfabrication Technology", room: "FF-7", teacher: "Dr. Shivani" },
         { start: "11:00", end: "11:50", subject: "Discrete Signal Processing", room: "FF-7", teacher: "Dr. KULDEEP BADERIA" },
-        { start: "12:00", end: "12:50", subject: "Introduction to Microfabrication Lab", room: "ABB-3, 4th Floor FABLAB", teacher: "Dr. HEMANT KUMAR" },
+        { start: "12:00", end: "13:50", subject: "Introduction to Microfabrication Lab", room: "ABB-3, 4th Floor FABLAB", teacher: "Dr. HEMANT KUMAR" },
     ]
 };
 
@@ -515,3 +515,4 @@ function formatTimeRemaining(minutes, prefix) {
 }
 
 init();
+
