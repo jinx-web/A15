@@ -7,7 +7,7 @@ const coreSchedule = {
     1: [ // Monday
         { start: "09:00", end: "09:50", subject: "Intro. to Microfabrication Technology", room: "FF-6", teacher: "Dr. Shivani" },
         { start: "11:00", end: "11:50", subject: "Analog Electronic Circuits", room: "FF-8", teacher: "Dr. NITIN MUCHHAL" },
-        { start: "14:00", end: "14:50", subject: "Analog Electronic Circuits", room: "FF-5", teacher: "Dr. NITIN MUCHHAL" }, 
+        { start: "14:00", end: "14:50", subject: "Communication Engineering", room: "G3", teacher: "Dr. NEETU JOSHI" }, 
     ],
     2: [ // Tuesday
         { start: "09:00", end: "10:50", subject: "Introduction to Microfabrication Lab", room: "ABB-3, 4th Floor FABLAB", teacher: "Dr. HEMANT KUMAR" },
@@ -18,23 +18,24 @@ const coreSchedule = {
     3: [ // Wednesday
         { start: "09:00", end: "10:50", subject: "Introduction to Microfabrication Lab", room: "ABB-3, 4th Floor FABLAB", teacher: "Dr. HEMANT KUMAR" },
         { start: "11:00", end: "12:50", subject: "ANALOG ELECTRONIC CIRCUITS LAB", room: "ABB-2,3rd FLoor, Analog and Digital Electronics Lab", teacher: "Dr. BHUVANESHWARI SHANKAR" },
+        { start: "15:00", end: "15:50", subject: "Discrete Signal Processing", room: "FF-8", teacher: "Dr. KULDEEP BADERIA" },
         { start: "16:00", end: "16:50", subject: "Analog Electronic Circuits", room: "FF-7", teacher: "Dr. NITIN MUCHHAL" }
     ],
     4: [ // Thursday
         { start: "11:00", end: "11:50", subject: "Communication Engineering", room: "FF-6", teacher: "Dr. NEETU JOSHI" },
-        { start: "12:00", end: "12:50", subject: "FUNDAMENTALS OF EMBEDDED SYSTEMS", room: "FF-8", teacher: "Dr. Shivani" },
+        { start: "12:00", end: "12:50", subject: "FUNDAMENTALS OF EMBEDDED SYSTEMS", room: "FF-7", teacher: "Dr. Ritesh" },
         { start: "15:00", end: "15:50", subject: "Discrete Signal Processing", room: "FF-1", teacher: "Dr. KULDEEP BADERIA" },
+        { start: "16:00", end: "16:50", subject: "Intro. to Microfabrication Technology", room: "G2", teacher: "Dr. Shivani" }
     ],
     5: [ // Friday
         { start: "11:00", end: "12:50", subject: "Intro. to VLSI lifecycle", room: "ABB-3,5th-Floor SPL", teacher: "Dr. GARIMA KAPUR" },
         { start: "14:00", end: "14:50", subject: "Intro. to Microfabrication Technology", room: "G-3", teacher: "Dr. Shivani" },
-        { start: "15:00", end: "15:50", subject: "FUNDAMENTALS OF EMBEDDED SYSTEMS", room: "FF-7", teacher: "Dr. Shivani" },
+        { start: "15:00", end: "15:50", subject: "FUNDAMENTALS OF EMBEDDED SYSTEMS", room: "FF-7", teacher: "Dr. Ritesh" },
+        { start: "16:00", end: "16:50", subject: "Analog Electronic Circuits", room: "FF-5", teacher: "Dr. NITIN MUCHHAL" },
+        
     ],
     6: [ // Saturday
-        { start: "09:00", end: "09:50", subject: "Communication Engineering", room: "CR325", teacher: "Dr. NEETU JOSHI" },
-        { start: "10:00", end: "10:50", subject: "Intro. to Microfabrication Technology", room: "FF-7", teacher: "Dr. Shivani" },
-        { start: "11:00", end: "11:50", subject: "Discrete Signal Processing", room: "FF-7", teacher: "Dr. KULDEEP BADERIA" },
-        { start: "12:00", end: "13:50", subject: "Introduction to Microfabrication Lab", room: "ABB-3, 4th Floor FABLAB", teacher: "Dr. HEMANT KUMAR" },
+        { start: "10:00", end: "11:50", subject: "Introduction to Microfabrication Lab", room: "ABB-3, 4th Floor FABLAB", teacher: "Dr. HEMANT KUMAR" },
     ]
 };
 
@@ -515,4 +516,5 @@ function formatTimeRemaining(minutes, prefix) {
 }
 
 init();
+
 
