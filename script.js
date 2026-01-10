@@ -7,11 +7,11 @@ const coreSchedule = {
     1: [ // Monday
         { start: "09:00", end: "09:50", subject: "Intro. to Microfabrication Technology", room: "FF-6", teacher: "Dr. Shivani" },
         { start: "11:00", end: "11:50", subject: "Analog Electronic Circuits", room: "FF-8", teacher: "Dr. NITIN MUCHHAL" },
-        { start: "14:00", end: "14:50", subject: "Communication Engineering", room: "G3", teacher: "Dr. NEETU JOSHI" }, 
+        { start: "12:00", end: "12:50", subject: "Communication Engineering", room: "G3", teacher: "Dr. NEETU JOSHI" }, 
     ],
     2: [ // Tuesday
         { start: "09:00", end: "10:50", subject: "Introduction to Microfabrication Lab", room: "ABB-3, 4th Floor FABLAB", teacher: "Dr. HEMANT KUMAR" },
-        { start: "11:00", end: "11:50", subject: "Communication Engineering", room: "G-3", teacher: "Dr. NEETU JOSHI" },
+        { start: "12:00", end: "12:50", subject: "Communication Engineering", room: "FF2", teacher: "Dr. NEETU JOSHI" },
         { start: "15:00", end: "15:50", subject: "FUNDAMENTALS OF EMBEDDED SYSTEMS", room: "FF-8", teacher: "Dr. Shivani" },
         { start: "16:00", end: "16:50", subject: "Discrete Signal Processing", room: "FF-6", teacher: "Dr. KULDEEP BADERIA" },
     ],
@@ -516,6 +516,7 @@ function formatTimeRemaining(minutes, prefix) {
 }
 
 init();
+
 
 
 
